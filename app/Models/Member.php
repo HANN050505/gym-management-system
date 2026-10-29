@@ -12,6 +12,7 @@ class Member extends Model
         'email',
         'no_hp',
         'alamat',
+        'foto',
         'qr_code',
         'status'
     ];
@@ -31,5 +32,15 @@ class Member extends Model
         return $this->hasMany(TransaksiMembership::class);
     }
 
-    
+    public function notifikasis()
+    {
+        return $this->hasMany(Notifikasi::class);
+    }
+
+    public function activeMembership()
+    {
+        return $this->hasOne(Membership::class)
+            ->where('status', 'aktif')
+            ->latest('tanggal_berakhir');
+    }
 }

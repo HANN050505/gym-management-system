@@ -14,6 +14,11 @@ class Membership extends Model
         'status'
     ];
 
+    protected $casts = [
+        'tanggal_mulai' => 'date',
+        'tanggal_berakhir' => 'date',
+    ];
+
     public function member()
     {
         return $this->belongsTo(Member::class);
@@ -21,6 +26,11 @@ class Membership extends Model
 
     public function paket()
     {
-        return $this->belongsTo(PaketMembership::class,'paket_membership_id');
+        return $this->belongsTo(PaketMembership::class, 'paket_membership_id');
+    }
+
+    public function transaksiMemberships()
+    {
+        return $this->hasMany(TransaksiMembership::class);
     }
 }

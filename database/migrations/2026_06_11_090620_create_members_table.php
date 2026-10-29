@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('members', function (Blueprint $table) {
-    $table->id();
-    $table->string('kode_member')->unique();
-    $table->string('nama');
-    $table->string('email')->nullable();
-    $table->string('no_hp');
-    $table->text('alamat')->nullable();
-    $table->string('qr_code')->nullable();
-    $table->timestamps();
-});
+            $table->id();
+            $table->string('kode_member')->unique();
+            $table->string('nama');
+            $table->string('email')->nullable();
+            $table->string('no_hp');
+            $table->text('alamat')->nullable();
+            $table->string('foto')->nullable();
+            $table->string('qr_code')->nullable();
+            $table->enum('status', ['aktif', 'expired'])->default('expired');
+            $table->timestamps();
+        });
     }
 
     /**

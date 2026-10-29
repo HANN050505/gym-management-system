@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transaksi_memberships', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('member_id')
-        ->constrained()
-        ->cascadeOnDelete();
-    $table->foreignId('paket_membership_id')
-        ->constrained()
-        ->cascadeOnDelete();
-    $table->decimal('total',12,2);
-    $table->date('tanggal_bayar');
-    $table->timestamps();
-});
+            $table->id();
+            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('paket_membership_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('membership_id')->nullable()->constrained()->nullOnDelete();
+            $table->decimal('total', 12, 2);
+            $table->string('metode_pembayaran')->default('cash');
+            $table->string('status_pembayaran')->default('lunas');
+            $table->text('catatan')->nullable();
+            $table->date('tanggal_bayar');
+            $table->timestamps();
+        });
     }
 
     /**

@@ -10,23 +10,23 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('members', function (Blueprint $table) {
+    {
+        if (!Schema::hasColumn('members', 'status')) {
+            Schema::table('members', function (Blueprint $table) {
+                $table->enum('status', [
+                    'aktif',
+                    'expired'
+                ])->default('expired');
+            });
+        }
+    }
 
-        $table->enum('status',[
-            'aktif',
-            'expired'
-        ])->default('expired');
-
-    });
-}
-
-public function down(): void
-{
-    Schema::table('members', function (Blueprint $table) {
-
-        $table->dropColumn('status');
-
-    });
-}
+    public function down(): void
+    {
+        if (Schema::hasColumn('members', 'status')) {
+            Schema::table('members', function (Blueprint $table) {
+                $table->dropColumn('status');
+            });
+        }
+    }
 };

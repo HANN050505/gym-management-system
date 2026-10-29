@@ -12,6 +12,10 @@ class Absensi extends Model
         'jam'
     ];
 
+    protected $casts = [
+        'tanggal' => 'date',
+    ];
+
     public function member()
     {
         return $this->belongsTo(Member::class);

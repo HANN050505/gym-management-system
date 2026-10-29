@@ -9,12 +9,9 @@ class PaketMembershipController extends Controller
 {
     public function index()
     {
-        $pakets = PaketMembership::all();
+        $pakets = PaketMembership::withCount('memberships')->latest()->paginate(10);
 
-        return view(
-            'paket_memberships.index',
-            compact('pakets')
-        );
+        return view('paket_memberships.index', compact('pakets'));
     }
 
     public function create()
@@ -24,46 +21,47 @@ class PaketMembershipController extends Controller
 
     public function store(Request $request)
     {
-        PaketMembership::create([
-            'nama_paket' => $request->nama_paket,
-            'durasi_hari' => $request->durasi_hari,
-            'harga' => $request->harga
+        $validated = $request->validate([
+            'nama_paket' => 'required|string|max:255',
+            'durasi_hari' => 'required|integer|min:1',
+            'harga' => 'required|numeric|min:0',
+            'deskripsi' => 'nullable|string|max:500',
+            'status' => 'required|in:aktif,nonaktif',
         ]);
 
-        return redirect()
-            ->route('paket-memberships.index');
+        PaketMembership::create($validated);
+
+        return redirect()->route('paket-memberships.index')
+            ->with('success', "Paket {$validated['nama_paket']} berhasil ditambahkan.");
     }
 
     public function edit(PaketMembership $paket_membership)
     {
-        return view(
-            'paket_memberships.edit',
-            compact('paket_membership')
-        );
+        return view('paket_memberships.edit', compact('paket_membership'));
     }
 
-    public function update(
-        Request $request,
-        PaketMembership $paket_membership
-    )
+    public function update(Request $request, PaketMembership $paket_membership)
     {
-        $paket_membership->update([
-            'nama_paket' => $request->nama_paket,
-            'durasi_hari' => $request->durasi_hari,
-            'harga' => $request->harga
+        $validated = $request->validate([
+            'nama_paket' => 'required|string|max:255',
+            'durasi_hari' => 'required|integer|min:1',
+            'harga' => 'required|numeric|min:0',
+            'deskripsi' => 'nullable|string|max:500',
+            'status' => 'required|in:aktif,nonaktif',
         ]);
 
-        return redirect()
-            ->route('paket-memberships.index');
+        $paket_membership->update($validated);
+
+        return redirect()->route('paket-memberships.index')
+            ->with('success', "Paket {$paket_membership->nama_paket} berhasil diperbarui.");
     }
 
-    public function destroy(
-        PaketMembership $paket_membership
-    )
+    public function destroy(PaketMembership $paket_membership)
     {
+        $nama = $paket_membership->nama_paket;
         $paket_membership->delete();
 
-        return redirect()
-            ->route('paket-memberships.index');
+        return redirect()->route('paket-memberships.index')
+            ->with('success', "Paket {$nama} berhasil dihapus.");
     }
 }

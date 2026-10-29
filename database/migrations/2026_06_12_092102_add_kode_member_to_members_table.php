@@ -10,23 +10,25 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::table('members', function ($table) {
-
-        $table->string('kode_member')
-              ->unique()
-              ->after('id');
-
-    });
-}
+    {
+        if (!Schema::hasColumn('members', 'kode_member')) {
+            Schema::table('members', function (Blueprint $table) {
+                $table->string('kode_member')
+                      ->unique()
+                      ->after('id');
+            });
+        }
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('members', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasColumn('members', 'kode_member')) {
+            Schema::table('members', function (Blueprint $table) {
+                $table->dropColumn('kode_member');
+            });
+        }
     }
 };

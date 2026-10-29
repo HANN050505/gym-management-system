@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('paket_memberships', function (Blueprint $table) {
-
-    $table->id();
-    $table->string('nama_paket');
-    $table->integer('durasi_hari');
-    $table->decimal('harga',12,2);
-    $table->timestamps();
-});
+            $table->id();
+            $table->string('nama_paket');
+            $table->integer('durasi_hari');
+            $table->decimal('harga', 12, 2);
+            $table->text('deskripsi')->nullable();
+            $table->string('status')->default('aktif');
+            $table->timestamps();
+        });
     }
 
     /**

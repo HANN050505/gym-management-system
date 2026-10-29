@@ -8,6 +8,24 @@ class Notifikasi extends Model
 {
     protected $fillable = [
         'member_id',
-        'pesan'
+        'membership_id',
+        'judul',
+        'pesan',
+        'tipe',
+        'dibaca'
     ];
+
+    protected $casts = [
+        'dibaca' => 'boolean',
+    ];
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class);
+    }
+
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class);
+    }
 }

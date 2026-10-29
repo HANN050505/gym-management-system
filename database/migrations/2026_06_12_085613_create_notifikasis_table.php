@@ -10,19 +10,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('notifikasis', function (Blueprint $table) {
-
-        $table->id();
-
-        $table->unsignedBigInteger('member_id');
-
-        $table->string('pesan');
-
-        $table->timestamps();
-
-    });
-}
+    {
+        Schema::create('notifikasis', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('membership_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('judul')->default('Notifikasi Membership');
+            $table->text('pesan');
+            $table->string('tipe')->default('warning');
+            $table->boolean('dibaca')->default(false);
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
